@@ -46,7 +46,7 @@ def init(secrets, config):
 def loadTable(config, tableName, fileName):
     global configLoaded
 
-    format_list = ['csv','tsv','parquet', 'gz', 'json', 'geojson', 'gpkg', 'kml', 'shp']
+    format_list = ['csv','tsv','parquet', 'gz', 'json', 'geojson', 'gpkg', 'kml', 'shp', 'gml']
     if (configLoaded == False):
         print("Load config")
         return None
@@ -75,7 +75,7 @@ def loadTable(config, tableName, fileName):
         db.query("CREATE TABLE "+ tableName +" AS (SELECT * FROM read_parquet('" + fileName + "'))")
     elif fileName.lower().endswith(".json"):
         db.query("CREATE TABLE "+ tableName +" AS (SELECT * FROM read_json_auto('" + fileName + "', maximum_object_size=60000000))")
-    elif '.' in fileName and fileName.lower().split('.')[1] in ['shp','geojson','gpkg','kml']:
+    elif '.' in fileName and fileName.lower().split('.')[1] in ['shp','geojson','gpkg','kml','gml']:
         # https://duckdb.org/2023/04/28/spatial.html
         db.query("INSTALL spatial;LOAD spatial;CREATE TABLE "+ tableName +" AS (SELECT * FROM ST_Read('" + fileName + "'))")
 
